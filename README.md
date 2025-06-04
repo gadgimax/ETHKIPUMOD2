@@ -76,7 +76,15 @@ During the auction, users can withdraw the **excess** ETH above their current bi
 
 ---
 
-## ✅ Project Checklist
+## Notes
+
+- **The winner also receives any excess ETH they deposited** when the auction ends.  
+  Without this, earlier bids from the winner would remain stuck in the contract.
+
+- **Only the latest (i.e., highest) bid is stored per user** to minimize on-chain data.  
+  Previous bids can still be retrieved from the `NewBid` event logs if needed.
+  
+## Project Checklist
 
 - [x] Deployed on **Sepolia**  
 - [x] Verified with source code visible  
