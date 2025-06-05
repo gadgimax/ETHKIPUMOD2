@@ -151,7 +151,8 @@ contract Auction {
 
     /// @dev Internal function to refund deposits (excess only for winner) minus 2% fee
     function returnDeposits() private {
-        for (uint256 i = 0; i < bidders.length; i++) {
+        uint256 count = bidders.length;
+        for (uint256 i = 0; i < count; i++) {
             address bidder = bidders[i];
             uint256 deposit = deposits[bidder];
 
