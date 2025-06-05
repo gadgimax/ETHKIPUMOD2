@@ -8,6 +8,12 @@ pragma solidity >0.8.0;
 contract Auction {
     /// @notice Address of the auction creator
     address private owner;
+    
+    /// @notice Address of the current highest bidder
+    address private highestBidder;
+
+    /// @notice List of all bidders (to return deposits later)
+    address[] private bidders;
 
     /// @notice Auction start time (Unix timestamp)
     uint256 private startTime;
@@ -24,17 +30,11 @@ contract Auction {
     /// @notice Highest bid so far
     uint256 private highestBid;
 
-    /// @notice Address of the current highest bidder
-    address private highestBidder;
-
     /// @notice Mapping to track deposits per bidder
     mapping(address => uint256) private deposits;
 
     /// @notice Mapping to track bids per bidder
     mapping(address => uint256) private bids;
-
-    /// @notice List of all bidders (to return deposits later)
-    address[] private bidders;
 
     /// @notice Tracks if a bidder has already placed a bid
     mapping(address => bool) private hasBid;
