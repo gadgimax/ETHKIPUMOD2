@@ -138,11 +138,12 @@ contract Auction {
     /// @return An array of Bid structs with each bidder’s latest bid
     function getBids() external view returns (Bid[] memory) {
         uint256 count = bidders.length;
+        address bidder;
         Bid[] memory list = new Bid[](count);
 
         // Build list of bids
         for (uint256 i = 0; i < count; i++) {
-            address bidder = bidders[i];
+            bidder = bidders[i];
             list[i] = Bid(bidder, bids[bidder]);
         }
 
@@ -151,10 +152,17 @@ contract Auction {
 
     /// @dev Internal function to refund deposits (excess only for winner) minus 2% fee
     function returnDeposits() private {
+        // Declare local variables outside for loop
         uint256 count = bidders.length;
+        address bidder;
+        uint256 deposit;
+        uint256 fee;
+        uint256 amountToReturn;
+        bool sent;
+        
         for (uint256 i = 0; i < count; i++) {
-            address bidder = bidders[i];
-            uint256 deposit = deposits[bidder];
+            bidder = bidders[i];
+            deposit = deposits[bidder];
 
             // Winner only gets excess refunded
             if (bidder == highestBidder) {
@@ -163,13 +171,13 @@ contract Auction {
 
             if (deposit > 0) {
                 // Apply 2% fee on the excess
-                uint256 fee = (deposit * 2) / 100;
-                uint256 amountToReturn = deposit - fee;
+                fee = (deposit * 2) / 100;
+                amountToReturn = deposit - fee;
 
                 deposits[bidder] = 0;
 
                 // Send the ETH back
-                (bool sent, ) = bidder.call{value: amountToReturn}("");
+                (sent, ) = bidder.call{value: amountToReturn}("");
                 require(sent, "Error returning ETH");
             }
         }
